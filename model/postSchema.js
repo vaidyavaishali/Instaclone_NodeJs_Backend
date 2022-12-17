@@ -6,7 +6,7 @@ const postSchema = new mongoose.Schema({
     Description : {type:String},
     Likes :{type:Number},
     file : {type:String},
-    Date : {type: String}
+    Date : {type: Date}
 })
 const  postModal = mongoose.model("post",postSchema)
 

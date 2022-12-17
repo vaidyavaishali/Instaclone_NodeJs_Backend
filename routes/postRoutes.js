@@ -4,7 +4,7 @@ const bodyparser = require('body-parser')
 const cloudinary = require("../cloudinary");
 const uploader = require("../multer");
 const UserArr = require("../Mock_data/data")
-// const date = require('date-and-time');
+
 const router = express.Router()
 
 router.use(bodyparser.json())
@@ -25,18 +25,16 @@ router.get("/getdata", async (req, res) => {
 })
 
 router.post("/form", uploader.single("file"), async (req, res) => {
-
+    const date = require('date-and-time');
+    const now = new Date();
+            const pattern = date.compile('MMM DD YYYY');
+            date.format(now, pattern);
     try {
         const Users = await PostData.find()
         if (!Users.length) {
             await PostData.create(UserArr)
         }
         else {
-            const now = new Date();
-            const pattern = date.compile('MMM DD YYYY');
-            date.format(now, pattern);
-
-
             const upload = await cloudinary.v2.uploader.upload(req.file.path);
             // console.log(req.file)
             const data = await PostData.insertMany({
@@ -45,9 +43,9 @@ router.post("/form", uploader.single("file"), async (req, res) => {
                 Likes: Math.floor(Math.random() * 1000),
                 Description: req.body.Description,
                 file: upload.secure_url,
-                Date: value
+                Date: Date.now()
             })
-            console.log(Date)
+            // console.log(Date)
             return res.status(200).json({
                 success: true,
                 result: data
@@ -56,9 +54,11 @@ router.post("/form", uploader.single("file"), async (req, res) => {
 
     }
     catch (e) {
+        console.log(e)
         res.status(404).json({
             status: "Failed",
-            message: e.message
+            message: e.message,
+          
         })
     }
 
