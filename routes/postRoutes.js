@@ -11,7 +11,7 @@ router.use(bodyparser.json())
 
 router.get("/getdata", async (req, res) => {
     try {
-        const postUser = await PostData.find()
+        const postUser = await PostData.find().sort({ Date: -1 })
         res.status(200).json(postUser)
         // status: "Successfully data display",
         // result: postUser
