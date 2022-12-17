@@ -4,9 +4,9 @@ const postSchema = new mongoose.Schema({
     Author: {type:String, required:true},
     Location : {type:String, required:true},
     Description : {type:String},
-    Likes :{type:Number},
+    Likes :{type:String},
     file : {type:String},
-    Date : Date
+    Date : {type: String}
 })
 const  postModal = mongoose.model("post",postSchema)
 

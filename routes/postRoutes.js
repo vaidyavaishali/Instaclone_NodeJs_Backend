@@ -25,13 +25,17 @@ router.get("/getdata", async (req, res) => {
 })
 
 router.post("/form", uploader.single("file"), async (req, res) => {
-
+   
     try {
         const Users = await PostData.find()
         if(!Users.length){
             await PostData.create(UserArr)
         }
         else{
+            const date = require('date-and-time');
+            const pattern = date.compile('DD MMM YYYY');
+            const value= date.format(new Date(), pattern);
+        
             const upload = await cloudinary.v2.uploader.upload(req.file.path);
             // console.log(req.file)
             const data = await PostData.insertMany({
@@ -40,8 +44,9 @@ router.post("/form", uploader.single("file"), async (req, res) => {
                 Likes: Math.floor(Math.random() * 1000),
                 Description: req.body. Description,
                 file: upload.secure_url,
-                Date: Date.now()
+                Date: value
             })
+            console.log(Date)
             return res. status(200).json({
                 success: true,
                 result: data
